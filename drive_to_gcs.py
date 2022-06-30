@@ -11,13 +11,14 @@ from google.oauth2 import service_account
 from googleapiclient.http import MediaIoBaseDownload
 
 SCOPES = ['https://www.googleapis.com/auth/drive']
-creds = service_account.Credentials.from_service_account_file('[JSON_CREDENTIALS]')
+creds = service_account.Credentials.from_service_account_file('[JSON_CREDENTIALS]') # If you're using local machine
+creds, _ = google.auth.default() #If you're using a cloud function directly
 scoped_credentials = creds.with_scopes(SCOPES)
 project_name = [PROJECT_NAME]
 
 
 def get_blobs():
-    client = storage.Client(project_name,creds)
+    client = storage.Client(project_name,creds) 
     bucket_name = client.get_bucket("[GCP_BUCKET_NAME]")
     objects_in_bucket = client.list_blobs(bucket_name, fields='items(name)')
     object_names = []
